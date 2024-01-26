@@ -1,13 +1,13 @@
 import cv2
-from pyzbar.pyzbar import decode
-import requests
-from bs4 import BeautifulSoup
-import pandas as pd
 import re
-
+import requests
 import time
-from selenium.webdriver.common.by import By
+import pandas as pd
+from bs4 import BeautifulSoup
+from pyzbar.pyzbar import decode
+
 from selenium import webdriver
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 
 def extraer_carrefour(producto):
