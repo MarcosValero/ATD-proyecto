@@ -1,0 +1,28 @@
+from bs4 import BeautifulSoup
+import time
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+import datetime
+from selenium.webdriver.support import expected_conditions as EC
+
+driver = webdriver.Chrome()
+
+driver.get('https://www.carrefour.es/?q=atun+calvo')
+
+accept_cookies = driver.find_element(By.ID,'onetrust-accept-btn-handler')
+accept_cookies.click()
+
+driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
+
+soup = BeautifulSoup(driver.page_source, "html.parser")
+#list_items = driver.find_elements(By.CLASS_NAME,'ebx-result-title ebx-result__title')
+
+list_items = driver.find_elements(By.CSS_SELECTOR,'h1')
+list_prices = driver.find_elements(By.CSS_SELECTOR,'strong')
+
+html = driver.page_source
+for (nombre,precio) in zip(list_prices,list_items):
+    print(nombre.text)
+    print(precio.text)
+barra_busqueda = driver.find_element(By.CLASS_NAME,'ebx-search-box__inputs-wrapper')
+barra_busqueda.click()
