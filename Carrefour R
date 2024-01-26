@@ -14,15 +14,15 @@ accept_cookies.click()
 
 driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
 
-soup = BeautifulSoup(driver.page_source, "html.parser")
-#list_items = driver.find_elements(By.CLASS_NAME,'ebx-result-title ebx-result__title')
 
-list_items = driver.find_elements(By.CSS_SELECTOR,'h1')
+list_items = driver.find_elements(By.CLASS_NAME,'ebx-result-title ebx-result__title')
 list_prices = driver.find_elements(By.CSS_SELECTOR,'strong')
-
+time.sleep(3)
 html = driver.page_source
-for (nombre,precio) in zip(list_prices,list_items):
-    print(nombre.text)
-    print(precio.text)
-barra_busqueda = driver.find_element(By.CLASS_NAME,'ebx-search-box__inputs-wrapper')
-barra_busqueda.click()
+soup = BeautifulSoup(driver.page_source, "html.parser")
+productos = soup.find_all('h1',class_='ebx-result-title ebx-result__title')
+prettySoup = soup.prettify()
+#print(prettySoup)
+
+for producto in productos:
+    print(producto.text)
