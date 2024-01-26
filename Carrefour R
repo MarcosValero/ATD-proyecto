@@ -5,24 +5,24 @@ from selenium import webdriver
 import datetime
 from selenium.webdriver.support import expected_conditions as EC
 
-driver = webdriver.Chrome()
+def extraer_carrefour(producto):
+    driver = webdriver.Chrome()
 
-driver.get('https://www.carrefour.es/?q=atun+calvo')
+    driver.get(f'https://www.carrefour.es/?q={producto}')
 
-accept_cookies = driver.find_element(By.ID,'onetrust-accept-btn-handler')
-accept_cookies.click()
+    accept_cookies = driver.find_element(By.ID,'onetrust-accept-btn-handler')
+    accept_cookies.click()
 
-driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
+    driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
 
+    time.sleep(1)
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+    productos = soup.find_all('h1',class_='ebx-result-title ebx-result__title')
+    precios= soup.find_all('p', class_='ebx-result-price ebx-result__price')
 
-list_items = driver.find_elements(By.CLASS_NAME,'ebx-result-title ebx-result__title')
-list_prices = driver.find_elements(By.CSS_SELECTOR,'strong')
-time.sleep(3)
-html = driver.page_source
-soup = BeautifulSoup(driver.page_source, "html.parser")
-productos = soup.find_all('h1',class_='ebx-result-title ebx-result__title')
-prettySoup = soup.prettify()
-#print(prettySoup)
+    d={}
+    driver.quit()
+    for producto,precio in zip(productos,precios):
+        d[producto.text]=precio.text
 
-for producto in productos:
-    print(producto.text)
+    return d
