@@ -19,3 +19,5 @@ prettySoup = soup.prettify()
 
 for producto in productos:
     print(producto.text)
+
+driver.quit()
