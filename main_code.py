@@ -31,6 +31,22 @@ def extraer_carrefour(producto):
     return d
 
 
+def extraer_dia(producto):
+    driver = webdriver.Chrome()
+    driver.get(f'https://www.dia.es/search?q={producto}')
+    time.sleep(1)
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+    productos = soup.find_all('p',class_='search-product-card__product-name')
+    precios = soup.find_all('p',class_='search-product-card__active-price')
+
+    d={}
+
+    driver.quit()
+    for producto,precio in zip(productos,precios):
+        d[producto.text]=precio.text.replace('\xa0','')# se reemplaza el caracter del espacio
+    return d
+    
+
 def descarte_marcas_blancas(texto, marca):
         d_marcas_blancas = {'mercadona':'hacendado','carrefour':'carrefour','consum':'consum',
                             'el corte inglés':'el corte inglés','dia':'dia'}
