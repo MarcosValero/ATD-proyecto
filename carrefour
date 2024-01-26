@@ -1,0 +1,44 @@
+from time import sleep
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+
+def buscar_carrefour(producto):
+    sleep(2)
+    driver=webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+    driver.get('https://www.carrefour.es')
+
+    #Aceptar las cookies
+    WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable((By.CSS_SELECTOR,'button#onetrust-accept-btn-handler'))).click()
+    
+    #pone el producto en la barra de busqueda
+    WebDriverWait(driver, 30).until(
+        EC.element_to_be_clickable((By.XPATH,'/html/body/section/header/div/div/input[3]'))).send_keys(producto)
+
+    #lee los productos eligibles
+    WebDriverWait(driver, 30).until(
+        EC.element_to_be_clickable((By.XPATH,'/html/body/section/section[1]/section')))
+    
+    sleep(1)
+
+    #carga la información de los productos 
+    texto_columnas= driver.find_element(By.XPATH,'/html/body/section/section[1]/section')
+
+    #crea una lista con los productos y la informacion
+    l=texto_columnas.text.split('\n')
+
+    sleep(2)
+
+    driver.quit()
+
+    print(l)
+    
+
+
+buscar_carrefour('champú')
