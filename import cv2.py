@@ -5,6 +5,32 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import re
 
+import time
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+import datetime
+from selenium.webdriver.support import expected_conditions as EC
+
+def extraer_carrefour(producto):
+    driver = webdriver.Chrome()
+
+    driver.get(f'https://www.carrefour.es/?q={producto}')  #el driver accede al sitio web de carrefour con el producto buscado
+
+    accept_cookies = driver.find_element(By.ID,'onetrust-accept-btn-handler')  #dentro de la web acepta las cookies
+    accept_cookies.click()
+
+    time.sleep(1) #espera 1s a que cargue la pagina
+    soup = BeautifulSoup(driver.page_source, "html.parser") #convierte en sopa de html esa pagina
+    productos = soup.find_all('h1',class_='ebx-result-title ebx-result__title') #busca los nombres de los productos
+    precios= soup.find_all('p', class_='ebx-result-price ebx-result__price')  #busca los precios de los productos
+
+    d={}
+    driver.quit()
+    for producto,precio in zip(productos,precios): #crea un diccionario de la forma {producto:precio}
+        d[producto.text]=precio.text
+    return d
+
+
 def descarte_marcas_blancas(texto, marca):
         d_marcas_blancas = {'mercadona':'hacendado','carrefour':'carrefour','consum':'consum',
                             'el corte inglés':'el corte inglés','dia':'dia'}
