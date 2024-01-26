@@ -9,7 +9,7 @@ driver = webdriver.Chrome()
 
 driver.get('https://www.dia.es/search?q=principe+maxi+choc')
 
-time.sleep(3)
+time.sleep(2)
 html = driver.page_source
 soup = BeautifulSoup(driver.page_source, "html.parser")
 productos = soup.find_all('p',class_='search-product-card__product-name')
