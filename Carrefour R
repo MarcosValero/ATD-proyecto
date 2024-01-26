@@ -8,21 +8,18 @@ from selenium.webdriver.support import expected_conditions as EC
 def extraer_carrefour(producto):
     driver = webdriver.Chrome()
 
-    driver.get(f'https://www.carrefour.es/?q={producto}')
+    driver.get(f'https://www.carrefour.es/?q={producto}')  #el driver accede al sitio web de carrefour con el producto buscado
 
-    accept_cookies = driver.find_element(By.ID,'onetrust-accept-btn-handler')
+    accept_cookies = driver.find_element(By.ID,'onetrust-accept-btn-handler')  #dentro de la web acepta las cookies
     accept_cookies.click()
 
-    driver.execute_script("window.scrollTo(0,document.body.scrollHeight);")
-
-    time.sleep(1)
-    soup = BeautifulSoup(driver.page_source, "html.parser")
-    productos = soup.find_all('h1',class_='ebx-result-title ebx-result__title')
-    precios= soup.find_all('p', class_='ebx-result-price ebx-result__price')
+    time.sleep(1) #espera 1s a que cargue la pagina
+    soup = BeautifulSoup(driver.page_source, "html.parser") #convierte en sopa de html esa pagina
+    productos = soup.find_all('h1',class_='ebx-result-title ebx-result__title') #busca los nombres de los productos
+    precios= soup.find_all('p', class_='ebx-result-price ebx-result__price')  #busca los precios de los productos
 
     d={}
     driver.quit()
-    for producto,precio in zip(productos,precios):
+    for producto,precio in zip(productos,precios): #crea un diccionario de la forma {producto:precio}
         d[producto.text]=precio.text
-
     return d
