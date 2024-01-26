@@ -13,6 +13,7 @@ time.sleep(3)
 html = driver.page_source
 soup = BeautifulSoup(driver.page_source, "html.parser")
 productos = soup.find_all('p',class_='search-product-card__product-name')
+precios = soup.find_all('p',class_='search-product-card__active-price')
 prettySoup = soup.prettify()
 #print(prettySoup)
 
