@@ -8,7 +8,6 @@ import re
 import time
 from selenium.webdriver.common.by import By
 from selenium import webdriver
-import datetime
 from selenium.webdriver.support import expected_conditions as EC
 
 def extraer_carrefour(producto):
