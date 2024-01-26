@@ -5,19 +5,17 @@ from selenium import webdriver
 import datetime
 from selenium.webdriver.support import expected_conditions as EC
 
-driver = webdriver.Chrome()
+def extraer_dia(producto):
+    driver = webdriver.Chrome()
+    driver.get(f'https://www.dia.es/search?q={producto}')
+    time.sleep(1)
+    soup = BeautifulSoup(driver.page_source, "html.parser")
+    productos = soup.find_all('p',class_='search-product-card__product-name')
+    precios = soup.find_all('p',class_='search-product-card__active-price')
 
-driver.get('https://www.dia.es/search?q=principe+maxi+choc')
+    d={}
 
-time.sleep(1)
-html = driver.page_source
-soup = BeautifulSoup(driver.page_source, "html.parser")
-productos = soup.find_all('p',class_='search-product-card__product-name')
-precios = soup.find_all('p',class_='search-product-card__active-price')
-prettySoup = soup.prettify()
-#print(prettySoup)
-
-for producto in productos:
-    print(producto.text)
-
-driver.quit()
+    driver.quit()
+    for producto,precio in zip(productos,precios):
+        d[producto.text]=precio.text.replace('\xa0','')# se reemplaza el caracter del espacio
+    return d
